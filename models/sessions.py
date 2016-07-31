@@ -1,7 +1,7 @@
 import random
 import string
 
-class Session:
+class Sessions:
     """ Session DAO. """
 
     def __init__(self, db):
@@ -13,7 +13,7 @@ class Session:
         self.sessions = db.sessions
 
     def startSession(self, username):
-        ''' (Session, str) -> str or None
+        ''' (Sessions, str) -> str or None
         Starts a new session by adding a new entry into the database for the given
         username
         '''
@@ -30,14 +30,14 @@ class Session:
         except: pass
 
     def endSession(self, sessionId):
-        ''' (Session, str) -> NoneType
+        ''' (Sessions, str) -> NoneType
         Ends the session by removing the session with sessionId from the database.
         '''
 
         self.sessions.delete_one({'_id': sessionId})
 
     def getSession(self, sessionId):
-        ''' (Session, str) -> dict or None
+        ''' (Sessions, str) -> dict or None
         Returns the session from the database if exists.
         '''
 
@@ -46,7 +46,7 @@ class Session:
         except: pass
 
     def getUsername(self, sessionId):
-        ''' (Session, str) -> str
+        ''' (Sessions, str) -> str
         Returns the username for the given sesssion.
         '''
 

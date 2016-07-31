@@ -3,11 +3,11 @@ import string
 import hashlib
 import random
 
-class User:
-    """ User DAO. """
+class Users:
+    """ Users DAO. """
 
     def __init__(self, db):
-        ''' (User, pymongo.Database) -> NoneType
+        ''' (Users, pymongo.Database) -> NoneType
         Constructor for this User.
         '''
 
@@ -15,7 +15,7 @@ class User:
         self.users = db.users
 
     def validate(self, username, password):
-        ''' (User, str, str) -> dict or None
+        ''' (Users, str, str) -> dict or None
         Returns the user record if the user login validates, None otherwise.
         '''
 
@@ -31,7 +31,7 @@ class User:
             pass
 
     def addUser(self, username, password, email):
-        ''' (User, str, str, str) -> bool
+        ''' (Users, str, str, str) -> bool
         Creates a new user in the database.
         '''
 
@@ -49,7 +49,7 @@ class User:
             pass
 
     def _getHash(self, password, _salt=None):
-        ''' (User, str, str) -> str
+        ''' (Users, str, str) -> str
         Returns the sha256 hash of password with the salt if given. Generates
         a random salt if salt not present.
         '''
