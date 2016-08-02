@@ -2,6 +2,7 @@ import pymongo
 import string
 import hashlib
 import random
+from utils.db import db
 
 class Users:
     """ Users DAO. """
@@ -58,3 +59,6 @@ class Users:
             _salt = ''.join([random.choice(string.ascii_letters)
                 for i in range(5)])
         return hashlib.sha256(password + _salt).hexdigest() + ':' + _salt
+
+# import this instance
+users = Users(db)

@@ -1,5 +1,6 @@
 import random
 import string
+from utils.db import db
 
 class Sessions:
     """ Session DAO. """
@@ -53,3 +54,6 @@ class Sessions:
         session = self.getSession(sessionId)
         if session:
             return session['username']
+
+# import this instance
+sessions = Sessions(db)

@@ -1,3 +1,6 @@
+import datetime
+import re
+from utils.db import db
 
 
 class Posts:
@@ -131,7 +134,5 @@ class Posts:
             } for post in posts
         ]
 
-
-
-
-
+# import this instance
+posts = Posts(db)
