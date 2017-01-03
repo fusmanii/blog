@@ -6,6 +6,7 @@ from models.users import users as USERS
 from models.posts import posts as POSTS
 from models.sessions import sessions as SESSIONS
 from bottle import SimpleTemplate
+import time
 
 
 
@@ -74,6 +75,42 @@ def showPost(permalink):
             )
     )
 
+@app.post('/newcomment')
+def postNewComment():
+    '''
+    Route for posting new comment for a given post.
+    '''
+
+    name = bottle.request.forms.get("name")
+    email = bottle.request.forms.get("email")
+    body = bottle.request.forms.get("message")
+    permalink = bottle.request.forms.get("permalink")
+    
+    post = POSTS.getPostByPermalink(permalink)
+
+    # if post not found, redirect to post not found error
+    if not post:
+        bottle.redirect("/post_not_found")
+        return
+
+    # all fields should be present
+    POSTS.addComment(permalink, name, email, body)
+    bottle.redirect("/post/" + permalink)
+
+@app.post('/like')
+def postCommentLike():
+    '''
+    Used to process a like on a blog post
+    '''
+
+    permalink = html.escape(bottle.request.forms.get("permalink"))
+    commentOrdinal = int(bottle.request.forms.get("commentOrdinal"))
+
+    post = POSTS.getPostByPermalink(permalink)
+    POSTS.incrementLikes(permalink, commentOrdinal)
+    bottle.redirect("/post/" + permalink)
+
+
 @app.route('/<filename:path>', name='static')
 def server_static(filename):
     '''
@@ -86,4 +123,4 @@ def server_static(filename):
     )
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=8000, debug=True)
+    app.run(host='127.0.0.1', port=8080, debug=True, reloader=True)

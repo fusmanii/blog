@@ -12,7 +12,7 @@
     <title>Clean Blog - Sample Post</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="{{ get_url('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <!-- Theme CSS -->
     <link href="{{ get_url('static', filename='css/clean-blog.min.css') }}" rel="stylesheet">
@@ -91,6 +91,27 @@
                     {{ post['body'] }}
                     <hr>
 
+                    <div class="row">
+                        <h4>Comments {{len(post.get('comments', []))}}<h4>
+                    </div>
+                    %for i in range(len(post.get('comments', []))):
+                    <div class="post-preview">
+                        <h2 class="post-title">
+                            {{ post['comments'][i]['author'] }}
+                        </h2>
+                        <form action="/like" method="POST">
+                            <input type="hidden" name="permalink", value="{{post['permalink']}}">
+                            <input type="hidden" name="commentOrdinal", value="{{i}}">
+                                Likes: {{post['comments'][i]['numLikes']}} 
+                            <input type="submit" class="btn btn-info btn-sm" value="Like">
+                        </form><br>
+                        <p class="post-subtitle">
+                            {{ post['comments'][i]['body'] }}
+                        </p>
+                    </div>
+                    <hr>
+                    %end
+
         			<!-- Contact Section -->
                     <section id="contact">
                         <div class="">
@@ -104,6 +125,7 @@
                                     <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                                     <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
                                     <form name="sentMessage" id="contactForm" novalidate>
+                                    <input type="hidden" id="permalink" name="permalink", value="{{post['permalink']}}">
                                         <div class="row control-group">
                                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                                 <label>Name</label>
@@ -185,7 +207,7 @@
     <script src="{{ get_url('static', filename='vendor/jquery/jquery.min.js') }}"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="{{ get_url('static', filename='vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Contact Form JavaScript -->
     <script src="{{ get_url('static', filename='js/jqBootstrapValidation.js') }}"></script>

@@ -78,8 +78,8 @@ class Posts:
             for comment in post['comments']:
                 if 'numLikes' not in comment:
                     comment['numLikes'] = 0
-                elif isinstance(comment['num_likes'], float):
-                    comment['num_likes'] = int(comment['num_likes'])
+                elif isinstance(comment['numLikes'], float):
+                    comment['numLikes'] = int(comment['numLikes'])
 
             post['date'] = post['date'].strftime('%A, %B %d %Y at %I:%M%p')
 
@@ -116,7 +116,7 @@ class Posts:
                 {'$inc': {
                         'comments.%d.numLikes' % commentOrdinal: 1
                     }}
-                ).modiefied_count
+                ).modified_count
 
     def _processPosts(self, posts):
         ''' (Posts, pymongo.Cursor) -> list of dict
