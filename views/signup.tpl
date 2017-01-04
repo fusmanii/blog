@@ -49,7 +49,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="index.html">Home</a>
+                        <a href="/">Home</a>
                     </li>
                     <li>
                         <a href="about.html">About</a>
@@ -58,7 +58,7 @@
                         <a href="post.html">Sample Post</a>
                     </li>
                     <li>
-                        <a href="contact.html">Contact</a>
+                        <a href="contact.html">Login</a>
                     </li>
                 </ul>
             </div>
@@ -74,9 +74,7 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="post-heading">
-                        <h1>{{ !post['title'] }}</h1>
-                        <h2 class="subheading">TODO: subheading</h2>
-                        <span class="meta">Posted by <a href="#">{{ post['author'] }}</a> on {{ post['date'] }}</span>
+                        <h1>Sign Up</h1>
                     </div>
                 </div>
             </div>
@@ -88,66 +86,67 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    {{ post['body'] }}
-                    <hr>
-
-                    <div class="row">
-                        <h4>Comments {{len(post.get('comments', []))}}<h4>
-                    </div>
-                    %for i in range(len(post.get('comments', []))):
-                    <div class="post-preview">
-                        <h2 class="post-title">
-                            {{ post['comments'][i]['author'] }}
-                        </h2>
-                        <form action="/like" method="POST">
-                            <input type="hidden" name="permalink", value="{{post['permalink']}}">
-                            <input type="hidden" name="commentOrdinal", value="{{i}}">
-                                Likes: {{post['comments'][i]['numLikes']}} 
-                            <input type="submit" class="btn btn-info btn-sm" value="Like">
-                        </form><br>
-                        <p class="post-subtitle">
-                            {{ post['comments'][i]['body'] }}
-                        </p>
-                    </div>
-                    <hr>
-                    %end
 
         			<!-- Contact Section -->
                     <section id="contact">
                         <div class="">
                             <div class="row">
-                                <div>
-                                    <h3>Add a comment</h3>
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-lg-8">
                                     <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                                     <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
-                                    <form action="/newcomment" method="POST" novalidate>
-                                    <input type="hidden" id="permalink" name="permalink", value="{{post['permalink']}}">
+                                    <form action="/signup" method="POST" novalidate>
                                         <div class="row control-group">
+                                            % if username_error:
+                                                <div class='alert alert-danger'>
+                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                    <strong>{{username_error}}</strong>
+                                                </div>
+                                            % end
                                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                                <label>Name</label>
-                                                <input type="text" class="form-control" placeholder="Name" id="name" required data-validation-required-message="Please enter your name." name="name">
+                                                <label>Username</label>
+                                                <input type="text" class="form-control" placeholder="Username" id="name" required data-validation-required-message="Please choose a username." name="username" value="{{username}}">
                                                 <p class="help-block text-danger"></p>
                                             </div>
                                         </div>
                                         <div class="row control-group">
+                                            % if password_error:
+                                                <div class='alert alert-danger'>
+                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                    <strong>{{password_error}}</strong>
+                                                </div>
+                                            % end
                                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                                <label>Email Address</label>
-                                                <input type="email" class="form-control" placeholder="Email Address" id="email" required data-validation-required-message="Please enter your email address." name="email">
+                                                <label>Password</label>
+                                                <input type="email" class="form-control" placeholder="Password" id="password" required data-validation-required-message="Please choose a password." name="password">
                                                 <p class="help-block text-danger"></p>
                                             </div>
                                         </div>
                                         <div class="row control-group">
+                                            % if verify_error:
+                                                <div class='alert alert-danger'>
+                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                    <strong>{{verify_error}}</strong>
+                                                </div>
+                                            % end
                                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                                <label>Message</label>
-                                                <textarea rows="5" class="form-control" placeholder="Message" id="message" required data-validation-required-message="Please enter a message." name="message"></textarea>
+                                                <label>Verify Password</label>
+                                                <input type="email" class="form-control" placeholder="Verify Password" id="verifypassword" required data-validation-required-message="Please retype password." name="verifypassword">
                                                 <p class="help-block text-danger"></p>
                                             </div>
                                         </div>
-                                        <input type="hidden" name="permalink", value="{{post['permalink']}}">
+                                        <div class="row control-group">
+                                            % if email_error:
+                                                <div class='alert alert-danger'>
+                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                    <strong>{{email_error}}</strong>
+                                                </div>
+                                            % end
+                                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                                <label>Email Address (optional)</label>
+                                                <input type="email" class="form-control" placeholder="Email Address" id="email" required data-validation-required-message="Please enter your email address." name="email" value="{{email}}">
+                                                <p class="help-block text-danger"></p>
+                                            </div>
+                                        </div>
                                         <br>
                                         <div id="success"></div>
                                         <div class="row">
