@@ -52,13 +52,7 @@
                         <a href="/">Home</a>
                     </li>
                     <li>
-                        <a href="/login">Login</a>
-                    </li>
-                    <li>
-                        <a href="post.html">Sample Post</a>
-                    </li>
-                    <li>
-                        <a href="contact.html">Login</a>
+                        <a href="/signup">Sign Up</a>
                     </li>
                 </ul>
             </div>
@@ -94,12 +88,12 @@
                                 <div class="col-lg-8">
                                     <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                                     <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
-                                    <form action="/signup" method="POST" novalidate>
+                                    <form action="/login" method="POST" novalidate>
                                         <div class="row control-group">
-                                            % if username_error:
+                                            % if login_error:
                                                 <div class='alert alert-danger'>
                                                     <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                    <strong>{{username_error}}</strong>
+                                                    <strong>{{login_error}}</strong>
                                                 </div>
                                             % end
                                             <div class="form-group col-xs-12 floating-label-form-group controls">
@@ -109,41 +103,9 @@
                                             </div>
                                         </div>
                                         <div class="row control-group">
-                                            % if password_error:
-                                                <div class='alert alert-danger'>
-                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                    <strong>{{password_error}}</strong>
-                                                </div>
-                                            % end
                                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                                 <label>Password</label>
                                                 <input type="email" class="form-control" placeholder="Password" id="password" required data-validation-required-message="Please choose a password." name="password">
-                                                <p class="help-block text-danger"></p>
-                                            </div>
-                                        </div>
-                                        <div class="row control-group">
-                                            % if verify_error:
-                                                <div class='alert alert-danger'>
-                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                    <strong>{{verify_error}}</strong>
-                                                </div>
-                                            % end
-                                            <div class="form-group col-xs-12 floating-label-form-group controls">
-                                                <label>Verify Password</label>
-                                                <input type="email" class="form-control" placeholder="Verify Password" id="verifypassword" required data-validation-required-message="Please retype password." name="verifypassword">
-                                                <p class="help-block text-danger"></p>
-                                            </div>
-                                        </div>
-                                        <div class="row control-group">
-                                            % if email_error:
-                                                <div class='alert alert-danger'>
-                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                    <strong>{{email_error}}</strong>
-                                                </div>
-                                            % end
-                                            <div class="form-group col-xs-12 floating-label-form-group controls">
-                                                <label>Email Address (optional)</label>
-                                                <input type="email" class="form-control" placeholder="Email Address" id="email" required data-validation-required-message="Please enter your email address." name="email" value="{{email}}">
                                                 <p class="help-block text-danger"></p>
                                             </div>
                                         </div>

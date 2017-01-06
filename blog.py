@@ -133,6 +133,50 @@ def getNewPost():
                             }
                     )
 
+@app.get('/login')
+def presentLogin():
+    '''
+    Displays the login page.
+    '''
+
+    return bottle.template(
+                'login',
+                {
+                    'username': "",
+                    'password': "",
+                    'login_error': ""
+                }
+            )
+
+@app.post('/login')
+def processLogin():
+    '''
+    Processes the login requst.
+    '''
+
+    user = USERS.validate(
+        bottle.request.forms.get("username"), 
+        bottle.request.forms.get("password")
+    )
+
+    if user:
+        sessionId = SESSIONS.start_session(user['_id'])
+
+        if not sessionId:
+            bottle.redirect('/internal_error')
+
+        bottle.request.set_cookie(sessionId)
+        bottle.redirect('/')
+    else:
+        return bottle.template(
+            'login',
+            {
+                'username': html.escape(bottle.request.forms.get("username")),
+                'password': "",
+                'login_error': "Invalid Error!"
+            }
+        )
+
 
 @app.get('/signup')
 def presentSignUp():
@@ -162,8 +206,6 @@ def processSignUp():
     username = bottle.request.forms.get("username")
     password = bottle.request.forms.get("password")
     verify = bottle.request.forms.get("verifypassword")
-    print('username:', username, 'password:', password, 'verify:', verify, 'email:', email)
-    print('equal', password == verify)
 
     errors = {
         'username': html.escape(username),
@@ -182,7 +224,7 @@ def processSignUp():
                                         Please choose another username."
             return bottle.template("signup", errors)
 
-        sessionId = sessions.start_session(username)
+        sessionId = SESSIONS.start_session(username)
         bottle.response.set_cookie("session", sessionId)
         bottle.redirect("/")
     else:

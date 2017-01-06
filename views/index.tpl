@@ -55,10 +55,7 @@
                         <a href="/signup">Sign Up</a>
                     </li>
                     <li>
-                        <a href="post.html">Sample Post</a>
-                    </li>
-                    <li>
-                        <a href="contact.html">Contact</a>
+                        <a href="/login">Login</a>
                     </li>
                 </ul>
             </div>
