@@ -58,7 +58,7 @@ class Users:
         if not _salt:
             _salt = ''.join([random.choice(string.ascii_letters)
                 for i in range(5)])
-        return hashlib.sha256(password + _salt).hexdigest() + ':' + _salt
+        return hashlib.sha256(password.encode('utf-8') + _salt.encode('utf-8')).hexdigest() + ':' + _salt
 
 # import this instance
 users = Users(db)

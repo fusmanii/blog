@@ -54,12 +54,6 @@
                     <li>
                         <a href="/login">Login</a>
                     </li>
-                    <li>
-                        <a href="post.html">Sample Post</a>
-                    </li>
-                    <li>
-                        <a href="contact.html">Login</a>
-                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -117,7 +111,7 @@
                                             % end
                                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                                 <label>Password</label>
-                                                <input type="email" class="form-control" placeholder="Password" id="password" required data-validation-required-message="Please choose a password." name="password">
+                                                <input type="password" class="form-control" placeholder="Password" id="password" required data-validation-required-message="Please choose a password." name="password">
                                                 <p class="help-block text-danger"></p>
                                             </div>
                                         </div>
@@ -130,7 +124,7 @@
                                             % end
                                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                                 <label>Verify Password</label>
-                                                <input type="email" class="form-control" placeholder="Verify Password" id="verifypassword" required data-validation-required-message="Please retype password." name="verifypassword">
+                                                <input type="password" class="form-control" placeholder="Verify Password" id="verifypassword" required data-validation-required-message="Please retype password." name="verifypassword">
                                                 <p class="help-block text-danger"></p>
                                             </div>
                                         </div>

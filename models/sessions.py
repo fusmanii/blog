@@ -22,7 +22,7 @@ class Sessions:
         session = {
                 '_id': ''.join([random.choice(string.ascii_letters)
                     for i in range(32)]),
-                'uesrname': username
+                'username': username
             }
 
         try:
@@ -48,11 +48,12 @@ class Sessions:
 
     def getUsername(self, sessionId):
         ''' (Sessions, str) -> str
-        Returns the username for the given sesssion.
+        Returns the username for the given session.
         '''
 
         session = self.getSession(sessionId)
         if session:
+            print('session:', session)
             return session['username']
 
 # import this instance

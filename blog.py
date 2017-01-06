@@ -21,6 +21,7 @@ def blogIndex():
     '''
 
     cookie = bottle.request.get_cookie('session')
+    print('cookie:', cookie)
 
     username = SESSIONS.getUsername(cookie)
 
@@ -119,7 +120,7 @@ def getNewPost():
     '''
 
     cookie = bottle.request.get_cookie("session")
-    username = SESSIONS.get_username(cookie)  # see if user is logged in
+    username = SESSIONS.getUsername(cookie)  # see if user is logged in
     if not username:
         bottle.redirect("/login")
 
@@ -160,7 +161,7 @@ def processLogin():
     )
 
     if user:
-        sessionId = SESSIONS.start_session(user['_id'])
+        sessionId = SESSIONS.startSession(user['_id'])
 
         if not sessionId:
             bottle.redirect('/internal_error')
@@ -218,13 +219,13 @@ def processSignUp():
     }
     if validateSignUp(username, password, verify, email, errors):
 
-        if not users.addUser(username, password, email):
+        if not USERS.addUser(username, password, email):
             # this was a duplicate
             errors['username_error'] = "Username already in use. \
                                         Please choose another username."
             return bottle.template("signup", errors)
 
-        sessionId = SESSIONS.start_session(username)
+        sessionId = SESSIONS.startSession(username)
         bottle.response.set_cookie("session", sessionId)
         bottle.redirect("/")
     else:

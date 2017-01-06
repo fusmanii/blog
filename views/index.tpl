@@ -48,6 +48,14 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
+                    % if username:
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        <a href=#>New Post</a>
+                    </li>
+                    % else:
                     <li>
                         <a href="/">Home</a>
                     </li>
@@ -57,6 +65,7 @@
                     <li>
                         <a href="/login">Login</a>
                     </li>
+                    % end
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

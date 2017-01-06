@@ -105,7 +105,7 @@
                                         <div class="row control-group">
                                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                                 <label>Password</label>
-                                                <input type="email" class="form-control" placeholder="Password" id="password" required data-validation-required-message="Please choose a password." name="password">
+                                                <input type="password" class="form-control" placeholder="Password" id="password" required data-validation-required-message="Please choose a password." name="password">
                                                 <p class="help-block text-danger"></p>
                                             </div>
                                         </div>
