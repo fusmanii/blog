@@ -14,7 +14,7 @@ class Posts:
         self.db = db
         self.posts = db.posts
 
-    def insert(self, title, post, tagsArray, author):
+    def insert(self, title, post, tagsList, author):
         ''' (Posts, str, str, list, str) -> str
         Inserts a new post into the database and returns the pemalink for
         the entry.
@@ -33,9 +33,9 @@ class Posts:
             'author': author,
             'body': post,
             'permalink': permalink,
-            'tags': tagsArray,
+            'tags': tagsList,
             'comments': [],
-            'date': datatime.datatime.utcnow()
+            'date': datetime.datetime.utcnow()
         }
 
         try:

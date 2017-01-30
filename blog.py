@@ -21,7 +21,6 @@ def blogIndex():
     '''
 
     cookie = bottle.request.get_cookie('session')
-    print('cookie:', cookie)
 
     username = SESSIONS.getUsername(cookie)
 
@@ -115,24 +114,77 @@ def postCommentLike():
 @app.get('/newpost')
 def getNewPost():
     '''
-    Displays the form allowing a user to add a new post. Only works for
-    logged-in users.
+    Gets the form to allow the user to post a new post. Only works for logged-
+    in users.
     '''
 
-    cookie = bottle.request.get_cookie("session")
-    username = SESSIONS.getUsername(cookie)  # see if user is logged in
-    if not username:
-        bottle.redirect("/login")
+    username = SESSIONS.getUsername(
+        bottle.request.get_cookie("session")
+        )
 
-    return bottle.template("newpost_template",
-                           {
-                                "subject": "",
-                                "body": "",
-                                "errors": "",
-                                "tags": "",
-                                "username": username
-                            }
-                    )
+    # redirect to login if user is not logged in.
+    if not username:
+        bottle.redirect('/login')
+    return bottle.template(
+            'newpost',
+            {
+                "title": "",
+                "post": "",
+                "errors": "",
+                "tags": "",
+                "username": username
+            }
+        )
+
+@app.post('/newpost')
+def postNewPost():
+    '''
+    Proccesses the new post. Only works for logged-in users.
+    '''
+
+    title = bottle.request.forms.get("title")
+    post = bottle.request.forms.get("post")
+    tags = bottle.request.forms.get("tags")
+
+    username = SESSIONS.getUsername(
+        bottle.request.get_cookie("session")
+        )
+
+    # redirect to login if user is not logged in.
+    if not username:
+        bottle.redirect('/login')
+
+    # don't proccess if title or post is missing
+    if not (title and post):
+        errors = "Post must contain a title and blog entry"
+        return bottle.template("newpost",
+                {
+                    "title": html.escape(title),
+                    "username": username,
+                    "post": html.escape(post),
+                    "tags": tags, "errors": errors
+                }
+            )
+
+    # extract tags
+    whiteSpace = re.compile('\s')
+    noWhiteSpace = whiteSpace.sub("", tags)
+    tags = [tag 
+                for tag in noWhiteSpace.split(',') 
+                    if not tag
+            ]
+
+    # substitute some <p> for the paragraph breaks
+    newline = re.compile('\r?\n')
+    post = newline.sub("<p>", html.escape(post))
+
+    # send to the post
+    bottle.redirect("/post/" + POSTS.insert(title, post, tags, username))
+
+
+
+
+
 
 @app.get('/login')
 def presentLogin():
@@ -166,7 +218,7 @@ def processLogin():
         if not sessionId:
             bottle.redirect('/internal_error')
 
-        bottle.request.set_cookie(sessionId)
+        bottle.response.set_cookie("session", sessionId)
         bottle.redirect('/')
     else:
         return bottle.template(
@@ -230,6 +282,17 @@ def processSignUp():
         bottle.redirect("/")
     else:
         return bottle.template("signup", errors)
+
+@app.get('/logout')
+def processLogout():
+    '''
+    Logs out the user and redirects to the home page.
+    '''
+
+    SESSIONS.endSession(bottle.request.get_cookie("session"))
+    bottle.response.set_cookie("session", "")
+    bottle.redirect("/")
+
 
 @app.route('/<filename:path>', name='static')
 def server_static(filename):

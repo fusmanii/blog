@@ -57,9 +57,6 @@
                         <a href="/">Home</a>
                     </li>
                     <li>
-                        <a href="/newpost">New Post</a>
-                    </li>
-                    <li>
                         <a href="/logout">Log Out</a>
                     </li>
                     % else:
@@ -87,9 +84,8 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="post-heading">
-                        <h1>{{ !post['title'] }}</h1>
+                        <h1>Blog Entry</h1>
                         <h2 class="subheading">TODO: subheading</h2>
-                        <span class="meta">Posted by <a href="#">{{ post['author'] }}</a> on {{ post['date'] }}</span>
                     </div>
                 </div>
             </div>
@@ -101,66 +97,49 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    {{ post['body'] }}
                     <hr>
 
-                    <div class="row">
-                        <h4>Comments {{len(post.get('comments', []))}}<h4>
-                    </div>
-                    %for i in range(len(post.get('comments', []))):
-                    <div class="post-preview">
-                        <h2 class="post-title">
-                            {{ post['comments'][i]['author'] }}
-                        </h2>
-                        <form action="/like" method="POST">
-                            <input type="hidden" name="permalink", value="{{post['permalink']}}">
-                            <input type="hidden" name="commentOrdinal", value="{{i}}">
-                                Likes: {{post['comments'][i]['numLikes']}} 
-                            <input type="submit" class="btn btn-primary btn-sm" value="Like">
-                        </form><br>
-                        <p class="post-subtitle">
-                            {{ post['comments'][i]['body'] }}
-                        </p>
-                    </div>
-                    <hr>
-                    %end
 
         			<!-- Contact Section -->
                     <section id="contact">
                         <div class="">
                             <div class="row">
                                 <div>
-                                    <h3>Add a comment</h3>
+                                    <h3>New Post</h3>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-8">
                                     <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                                     <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
-                                    <form action="/newcomment" method="POST" novalidate>
-                                    <input type="hidden" id="permalink" name="permalink", value="{{post['permalink']}}">
-                                        <div class="row control-group">
-                                            <div class="form-group col-xs-12 floating-label-form-group controls">
-                                                <label>Name</label>
-                                                <input type="text" class="form-control" placeholder="Name" id="name" required data-validation-required-message="Please enter your name." name="name">
-                                                <p class="help-block text-danger"></p>
+                                    <form action="/newpost" method="POST" novalidate>
+                                        % if errors:
+                                            <div class='alert alert-danger'>
+                                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                <strong>{{errors}}</strong>
                                             </div>
-                                        </div>
+                                        % end
                                         <div class="row control-group">
                                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                                <label>Email Address</label>
-                                                <input type="email" class="form-control" placeholder="Email Address" id="email" required data-validation-required-message="Please enter your email address." name="email">
+                                                <label>Title</label>
+                                                <input type="text" class="form-control" placeholder="Post title" id="title" required data-validation-required-message="Please enter the title" name="title" value="{{title}}">
                                                 <p class="help-block text-danger"></p>
                                             </div>
                                         </div>
                                         <div class="row control-group">
                                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                                 <label>Message</label>
-                                                <textarea rows="5" class="form-control" placeholder="Message" id="message" required data-validation-required-message="Please enter a message." name="message"></textarea>
+                                                <textarea rows="5" class="form-control" placeholder="Message" id="post" required data-validation-required-message="Please enter a message." name="post">{{post}}</textarea>
                                                 <p class="help-block text-danger"></p>
                                             </div>
                                         </div>
-                                        <input type="hidden" name="permalink", value="{{post['permalink']}}">
+                                        <div class="row control-group">
+                                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                                <label>Tags</label>
+                                                <input type="text" class="form-control" placeholder="Tags. Comma separated, please" id="tags" required data-validation-required-message="Tags. Comma separated, please." name="tags" value="{{tags}}">
+                                                <p class="help-block text-danger"></p>
+                                            </div>
+                                        </div>
                                         <br>
                                         <div id="success"></div>
                                         <div class="row">

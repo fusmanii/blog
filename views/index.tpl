@@ -42,7 +42,11 @@
                     <span class="sr-only">Toggle navigation</span>
                     Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="index.html">Start Bootstrap</a>
+                % if username:
+                <a class="navbar-brand" href="/">Welcome {{ username }}</a>
+                % else:
+                <a class="navbar-brand" href="/">Simple Blog</a>
+                % end
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -53,7 +57,10 @@
                         <a href="/">Home</a>
                     </li>
                     <li>
-                        <a href=#>New Post</a>
+                        <a href="/newpost">New Post</a>
+                    </li>
+                    <li>
+                        <a href="/logout">Log Out</a>
                     </li>
                     % else:
                     <li>
