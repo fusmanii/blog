@@ -12,7 +12,7 @@
     <title>Blog - Post</title>
 
     <!-- Bootstrap Core CSS -->
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="screen">
 
     <!-- Theme CSS -->
     <link href="{{ get_url('static', filename='css/clean-blog.css') }}" rel="stylesheet">
@@ -92,6 +92,7 @@
         </div>
     </header>
 
+
     <!-- Post Content -->
     <article>
         <div class="container">
@@ -112,7 +113,7 @@
                                 <div class="col-lg-8">
                                     <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                                     <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
-                                    <form action="/newpost" method="POST" novalidate>
+                                    <form action="/newpost" method="POST" novalidate enctype="multipart/form-data">
                                         % if errors:
                                             <div class='alert alert-danger'>
                                                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -126,6 +127,12 @@
                                                 <p class="help-block text-danger"></p>
                                             </div>
                                         </div>
+                                        
+                                            
+                                                <label class="control-label">Select File</label>
+                                                <input type="file" name="image">
+                                           
+                                        
                                         <div class="row control-group">
                                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                                 <label>Message</label>

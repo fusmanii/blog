@@ -6,47 +6,78 @@ import bottle
 from models.users import users as USERS
 from models.posts import posts as POSTS
 from models.sessions import sessions as SESSIONS
-from bottle import SimpleTemplate
+from models.media import media as MEDIA
+from bottle import SimpleTemplate, response, HTTPResponse
 import time
+import mimetypes
 
 
-
+PAGESIZE = 3
 app = bottle.Bottle()
 SimpleTemplate.defaults["get_url"] = app.get_url
 
-@app.route('/')
-def blogIndex():
+@app.route(['/', '/:page#\d+#'])
+def blogIndex(page=1):
     '''
     The main page for the blog.
     '''
+
+    page = int(page) if int(page) >= 1 else 1
+    prevPage = None
+    nextPage = None
+    if page > 1:
+        prevPage = page - 1
 
     cookie = bottle.request.get_cookie('session')
 
     username = SESSIONS.getUsername(cookie)
 
-    posts = POSTS.getPosts(10)
+    posts = POSTS.getPosts((page-1)*PAGESIZE, PAGESIZE)
+    if POSTS.getPosts((page)*PAGESIZE, PAGESIZE):
+        nextPage = page + 1
+    else:
+        nextPage = 1
 
     return bottle.template(
             'index',
-            dict(posts=posts, username=username)
+            dict(posts=posts, 
+                username=username, 
+                page=page, tag='', 
+                nextPage=nextPage, 
+                prevPage=prevPage)
     )
 
-@app.route('/tag/<tag>')
-def postByTag(tag='notfound'):
+@app.route(['/tag/:tag', '/tag/:tag/:page#\d+#'])
+def postByTag(tag='notfound',page=1):
     '''
     Posts filtered by tag.
     '''
+
+    page = int(page) if int(page) >= 1 else 1
+    prevPage = None
+    nextPage = None
+    if page > 1:
+        prevPage = page - 1
 
     cookie = bottle.request.get_cookie('session')
     tag = html.escape(tag)
 
     username = SESSIONS.getUsername(cookie)
 
-    posts = POSTS.getPostsByTag(tag, 10)
+    posts = POSTS.getPostsByTag(tag, (page-1)*PAGESIZE, PAGESIZE)
+    print("post: ", bool(POSTS.getPostsByTag(tag, (page)*PAGESIZE, PAGESIZE)))
+    if POSTS.getPostsByTag(tag, (page)*PAGESIZE, PAGESIZE):
+        nextPage = page + 1
+    else:
+        nextPage = 1
 
     return bottle.template(
             'index',
-            dict(posts=posts, username=username)
+            dict(posts=posts, 
+                username=username, 
+                page=page, tag=tag, 
+                nextPage=nextPage, 
+                prevPage=prevPage)
     )
 
 @app.get('/post/<permalink>')
@@ -75,6 +106,18 @@ def showPost(permalink):
                 comment=comment
             )
     )
+
+@app.get('/:imageType#(image|thumb)#/:permalink')
+def getImage(imageType, permalink):
+    ''' 
+    Gets the image from the datebase for the post with the given
+    permalink.
+    '''
+
+    print('image')
+    image = MEDIA.getMediaByPermalink(permalink, imageType)
+    response.content_type = image.content_type
+    return HTTPResponse(image)
 
 @app.post('/newcomment')
 def postNewComment():
@@ -145,6 +188,7 @@ def postNewPost():
     title = bottle.request.forms.get("title")
     post = bottle.request.forms.get("post")
     tags = bottle.request.forms.get("tags")
+    file = bottle.request.files.get("image")
 
     username = SESSIONS.getUsername(
         bottle.request.get_cookie("session")
@@ -166,25 +210,39 @@ def postNewPost():
                 }
             )
 
+
+
     # extract tags
     whiteSpace = re.compile('\s')
     noWhiteSpace = whiteSpace.sub("", tags)
-    tags = [tag 
-                for tag in noWhiteSpace.split(',') 
-                    if not tag
+    cleanTags = [tag 
+                for tag in noWhiteSpace.split(',')
             ]
 
     # substitute some <p> for the paragraph breaks
     newline = re.compile('\r?\n')
     post = newline.sub("<p>", html.escape(post))
 
+    print("cleantags:", cleanTags)
+    permalink = POSTS.insert(title, post, cleanTags, username)
+
+    if not (file and file.filename.lower().endswith(
+        ('.jpg', '.jpeg', '.png', '.bmp', '.gif'))):
+        print("filename: ", file.filename)
+        errors = "Missing or incorrect image format"
+        return bottle.template("newpost",
+                {
+                    "title": html.escape(title),
+                    "username": username,
+                    "post": html.escape(post),
+                    "tags": tags, "errors": errors
+                }
+            )
+    filetype = mimetypes.guess_type(file.filename)[0]
+    MEDIA.insert(permalink, file.file, file.filename, filetype)
+
     # send to the post
-    bottle.redirect("/post/" + POSTS.insert(title, post, tags, username))
-
-
-
-
-
+    bottle.redirect("/post/" + permalink)
 
 @app.get('/login')
 def presentLogin():

@@ -104,6 +104,7 @@
                 %for post in posts:
                 <div class="post-preview">
                     <a href="/post/{{post['permalink']}}">
+                        <img src="/thumb/{{post['permalink']}}" alt="Smiley face" height="60" width="80">
                         <h2 class="post-title">
                             {{post['title']}}
                         </h2>
@@ -113,11 +114,11 @@
                     </a>
                     <p class="post-meta">Posted by <a href="#">{{post['author']}}</a> on {{post['date']}}</p>
                     %if ('tags' in post):
-                    %for tag in post['tags'][0:1]:
-                    <a href="/tag/{{tag}}">{{tag}}</a>
+                    %for t in post['tags'][0:1]:
+                    <a href="/tag/{{t}}">{{t}}</a>
                     %end
-                    %for tag in post['tags'][1:]:
-                    , <a href="/tag/{{tag}}">{{tag}}</a>
+                    %for t in post['tags'][1:]:
+                    , <a href="/tag/{{t}}">{{t}}</a>
                     %end
                     %end
                 </div>
@@ -126,9 +127,16 @@
 
                 <!-- Pager -->
                 <ul class="pager">
-                    <li class="next">
-                        <a href="#">Older Posts &rarr;</a>
+                    % if page > 1:
+                    <li class="previous">
+                        <a href="{{(('/tag/' + tag) if tag else '') + '/' + str(prevPage)}}">&larr; Newer Posts</a>
                     </li>
+                    % end
+                    % if nextPage > 1:
+                    <li class="next">
+                        <a href="{{(('/tag/' + tag) if tag else '') + '/' + str(nextPage)}}">Older Posts &rarr;</a>
+                    </li>
+                    % end
                 </ul>
             </div>
         </div>

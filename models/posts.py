@@ -44,7 +44,7 @@ class Posts:
 
         return permalink
 
-    def getPosts(self, numPosts):
+    def getPosts(self, skipPosts, numPosts):
         ''' (Posts, int) -> list of dict
         Return a list of posts containing numPosts posts.
         '''
@@ -52,10 +52,10 @@ class Posts:
         return self._processPosts(self.posts.find().sort(
                 'date',
                 direction=-1
-            ).limit(numPosts)
+            ).skip(skipPosts).limit(numPosts)
         )
 
-    def getPostsByTag(self, tag, numPosts):
+    def getPostsByTag(self, tag, skipPosts, numPosts):
         ''' (Posts, str, int) -> list of dict
         Returns a list of posts with the given tag.
         '''
@@ -65,7 +65,7 @@ class Posts:
             }).sort(
                 'date',
                 direction=-1
-            ).limit(numPosts)
+            ).skip(skipPosts).limit(numPosts)
         )
 
     def getPostByPermalink(self, permalink):

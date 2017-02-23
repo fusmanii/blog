@@ -53,7 +53,6 @@ class Sessions:
 
         session = self.getSession(sessionId)
         if session:
-            print('session:', session)
             return session['username']
 
 # import this instance
