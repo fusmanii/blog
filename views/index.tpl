@@ -82,7 +82,7 @@
 
     <!-- Page Header -->
     <!-- Set your background image for this header on the line below. -->
-    <header class="intro-header" style="background-image: url({{ get_url('static', filename='img/home-bg.jpg') }})">
+    <header class="intro-header" style="background-image: url({{ get_url('static', filename='img/intro.jpg') }})">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -115,11 +115,12 @@
                     <p class="post-meta">Posted by <a href="#">{{post['author']}}</a> on {{post['date']}}</p>
                     %if ('tags' in post):
                     %for t in post['tags'][0:1]:
-                    <a href="/tag/{{t}}">{{t}}</a>
+                    <p class="post-meta"> <a href="/tag/{{t}}">{{t}}</a>
                     %end
                     %for t in post['tags'][1:]:
                     , <a href="/tag/{{t}}">{{t}}</a>
                     %end
+                    </p>
                     %end
                 </div>
                 <hr>
@@ -151,15 +152,15 @@
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <ul class="list-inline text-center">
                         <li>
-                            <a href="#">
+                            <a href="https://www.linkedin.com/in/fusmanii/">
                                 <span class="fa-stack fa-lg">
                                     <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                    <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
                                 </span>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="https://www.facebook.com/fusmanii">
                                 <span class="fa-stack fa-lg">
                                     <i class="fa fa-circle fa-stack-2x"></i>
                                     <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
@@ -167,7 +168,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="https://github.com/fusmanii">
                                 <span class="fa-stack fa-lg">
                                     <i class="fa fa-circle fa-stack-2x"></i>
                                     <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -175,7 +176,6 @@
                             </a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted">Copyright &copy; Your Website 2016</p>
                 </div>
             </div>
         </div>

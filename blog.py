@@ -8,8 +8,10 @@ from models.posts import posts as POSTS
 from models.sessions import sessions as SESSIONS
 from models.media import media as MEDIA
 from bottle import SimpleTemplate, response, HTTPResponse
+from PIL import Image
 import time
 import mimetypes
+
 
 
 PAGESIZE = 3
@@ -65,7 +67,6 @@ def postByTag(tag='notfound',page=1):
     username = SESSIONS.getUsername(cookie)
 
     posts = POSTS.getPostsByTag(tag, (page-1)*PAGESIZE, PAGESIZE)
-    print("post: ", bool(POSTS.getPostsByTag(tag, (page)*PAGESIZE, PAGESIZE)))
     if POSTS.getPostsByTag(tag, (page)*PAGESIZE, PAGESIZE):
         nextPage = page + 1
     else:
@@ -113,8 +114,7 @@ def getImage(imageType, permalink):
     Gets the image from the datebase for the post with the given
     permalink.
     '''
-
-    print('image')
+    
     image = MEDIA.getMediaByPermalink(permalink, imageType)
     response.content_type = image.content_type
     return HTTPResponse(image)
@@ -223,12 +223,10 @@ def postNewPost():
     newline = re.compile('\r?\n')
     post = newline.sub("<p>", html.escape(post))
 
-    print("cleantags:", cleanTags)
     permalink = POSTS.insert(title, post, cleanTags, username)
 
     if not (file and file.filename.lower().endswith(
         ('.jpg', '.jpeg', '.png', '.bmp', '.gif'))):
-        print("filename: ", file.filename)
         errors = "Missing or incorrect image format"
         return bottle.template("newpost",
                 {

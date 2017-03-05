@@ -43,8 +43,7 @@ class Media:
         ''' (Media, str, str) -> mongoengine.fields.GridFSProxy
         Returns the media (full image or thumbnail) with the permalink permalink.
         '''
-
-        print("QUery:", MongoMedia.objects(permalink=permalink)[0][imageType])
+        
         return MongoMedia.objects(permalink=permalink)[0][imageType]
 
 connect(DB_NAME)
